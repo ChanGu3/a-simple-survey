@@ -1,0 +1,127 @@
+<% layout('layouts/index.ejs') %>
+<% block('scripts').append(`<script defer src="/js/home.mjs"></script>`)%>
+
+    <main class="flex justify-center">
+        <div class="flex flex-col box-border min-w-72 min-h-96 p-4 rounded-lg shadow-[0px_0px_6px_2px_rgba(0,0,0,0.25)] items-center">
+            <h1 class="mt-2 text-2xl font-bold text-blue-600">Functional Programming Adoption at WSU - Survey</h1>
+            <div class="flex flex-row mt-2 space-x-6">
+                <p class="max-w-[550px] text-justify text-sm">
+                    Functional programming is gaining popularity in both academia and industry. this survey gathers 
+                    insights into students' prior exposure to functional programming and their overall preferences in
+                    programming paradigms. Your response will help shape the future of programming curriculum at 
+                    WSU.
+                </p>
+                <img class="rounded-md w-auto max-h-40" src="images/programmer.jpeg" alt="ProfCof"/>
+            </div>
+
+            <!-- Survey Form  -->
+            <form id="surveyform" onsubmit="ValidateForm(event)" method="post" class="flex flex-col space-y-4 w-full mt-1">
+                <div class="flex flex-col">
+                    <label class="font-bold" for="fullName"> Full Name </label>
+                    <input id="fullname" name="fullname" type="text" class="px-3 py-1 border border-gray-300 rounded-md placeholder:text-gray-700"/>
+                </div>
+
+                <div class="flex flex-col">
+                    <label class="font-bold" for="email"> Email </label>
+                    <input  id="email" name="email" type="email" class="px-3 py-1 border border-gray-300 rounded-md placeholder:text-gray-700"/>
+                </div>
+
+                <div class="flex flex-col">
+                    <label class="font-bold" for="major"> Major </label>
+                    <select id="major" name="major" class="px-3 py-1 border border-gray-300 rounded-md">
+                        <option value="" disabled selected>Select Major</option>
+                        <option value="Computer Science">Computer Science</option>
+                        <option value="Software Engineering">Software Engineering</option>
+                        <option value="Computer Engineering">Computer Engineering</option>
+                        <option value="Electrical Engineering">Electrical Engineering</option>
+                        <option value="Cybersecurity">Cybersecurity</option>
+                        <option value="Data Science">Data Science</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
+                <div id="ooexperience-radio-container" class="flex flex-col">
+                    <label class="font-bold"> Do you have experience using an object-oriented language? </label>
+                    <div class="flex flex-row space-x-6">
+                        <div class="flex flex-row space-x-2">
+                            <input id="ooexperience-yes" name="ooexperience" type="radio" value="yes" onclick="On_ooexperience_Clicked(event)" class="px-3 py-1"/>
+                            <label for="ooexperience-yes"> Yes </label>
+                        </div>
+                        <div class="flex flex-row space-x-2">
+                            <input id="ooexperience-no" name="ooexperience" type="radio" checked value="no" onclick="On_ooexperience_Clicked(event)" class="px-3 py-1"/>
+                            <label for="ooexperience-no"> No </label>
+                        </div>
+                    </div>
+                </div>
+
+                    <!-- Choice When ooexperience radio is yes... -->
+                    <div id="oochoice-container" class="flex flex-col hidden">
+                        <label class="font-bold" for="major"> Which OOP Language? </label>
+                        <select id="oochoice" name="oochoice" class="px-3 py-1 border border-gray-300 rounded-md">
+                            <option value="" disabled selected>Select OOP Language</option>
+                            <option value="Java">Java</option>
+                            <option value="C#">C#</option>
+                            <option value="C++">C++</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+
+                <div id="ulovm-radio-container" class="flex flex-col">
+                    <label class="font-bold"> Have you used a language that run's on a virtual machine? </label>
+                    <div class="flex flex-row space-x-6">
+                        <div class="flex flex-row space-x-2">
+                            <input id="ulovm-yes" name="ulovm" type="radio" value="yes" class="px-3 py-1"/>
+                            <label for="ulovm-yes"> Yes </label>
+                        </div>
+                        <div class="flex flex-row space-x-2">
+                            <input id="ulovm-no" name="ulovm" type="radio" checked value="no" class="px-3 py-1"/>
+                            <label for="ulovm-no"> No </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex flex-col">
+                    <label class="font-bold" for="favFOI"> Do you prefer functional or imperative programming? </label>
+                    <select id="prefer_foip" name="prefer_foip" class="px-3 py-1 border border-gray-300 rounded-md">
+                        <option value="" disabled selected>Select</option>
+                        <option value="Imperative">Imperative</option>
+                        <option value="Functional">Functional</option>
+                        <option value="Both">Both</option>
+                    </select>
+                </div>
+
+                <div class="flex flex-col">
+                    <label class="font-bold" for="email"> What is your favorite functional programming language? </label>
+                    <input id="favorite_fpl" name="favorite_fpl" type="text" class="px-3 py-1 border border-gray-300 rounded-md placeholder:text-gray-700"/>
+                </div>
+
+                <button class="max-w-32 h-10 px-3 py-1 rounded-md bg-blue-600 text-white text-sm hover:bg-gray-500 active:bg-gray-600" type="submit">Submit Survey</button>
+            </form>
+
+            <p class="text-pink-800 text-sm font-medium mt-2 hidden" id="errorMSG">Error</p>
+            <div class="flex flex-row w-full justify-start">
+                <h2 class="text-2xl font-bold text-blue-700 mt-6 mb-2">Survey Responses</h2>
+            </div>
+            <table class="table w-full mt-1" id="surveytable">
+                <thead class="table-header-group">
+                    <tr class="table-row">
+                        <th class="table-cell text-left px-2 py-1 border border-gray-300">Name</th>
+                        <th class="table-cell text-left px-2 py-1 border border-gray-300">Major</th>
+                        <th class="table-cell text-left px-2 py-1 border border-gray-300">Preferred Paradigm</th>
+                        <th class="table-cell text-left px-2 py-1 border border-gray-300">Favorite FP Language</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% surveyList.forEach( (row) => { %>
+                        <tr class="table-row">
+                            <td class="table-cell text-left px-2 py-1 border border-gray-300"><%= row.fullname %></td>
+                            <td class="table-cell text-left px-2 py-1 border border-gray-300"><%= row.major %></td>
+                            <td class="table-cell text-left px-2 py-1 border border-gray-300"><%= row.favorite_fpl %></td>
+                            <td class="table-cell text-left px-2 py-1 border border-gray-300"><%= row.prefer_foip %></td>
+                        </tr> 
+                    <% }) %>
+                </tbody>
+            </table>
+            <br>
+        </div>
+    </main>
